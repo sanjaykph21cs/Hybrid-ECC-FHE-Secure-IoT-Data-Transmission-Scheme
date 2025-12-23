@@ -149,7 +149,7 @@ int main()
     }
 
     cout << "\n Proposed Hybrid Scheme’s Encryption and Decryption Throughput\n";
-    cout << "KeySize\tEnc_Throughput (kbps)\tDec_ Throughput (kbps)\n";
+    cout << "KeySize\tEnc_Throughput (bps)\tDec_ Throughput (bps)\n";
     for (int k : keySizes)
   {
         double encT, decT;
@@ -160,4 +160,5 @@ int main()
     }
     return 0;
 }
+
 
