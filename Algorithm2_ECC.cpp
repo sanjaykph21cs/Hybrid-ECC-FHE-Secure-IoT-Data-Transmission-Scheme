@@ -1,4 +1,5 @@
 /* ---------ECC-Based Encryption and Decryption Scheme--------- */
+
 #include <openssl/ec.h>
 #include <openssl/obj_mac.h>
 #include <openssl/bn.h>
@@ -23,9 +24,11 @@ void Algorithm2_ECC(int msg)
 
     BIGNUM* Sec = randomScalar(group);          // Private key
     EC_POINT* Pub = EC_POINT_new(group);        // Public key
+    
     EC_POINT_mul(group, Pub, Sec, NULL, NULL, ctx);
 
     /* --------- Message Mapping --------- */
+    
     EC_POINT* Pmsg = EC_POINT_new(group);
     BIGNUM* msgBN = BN_new();
     BN_set_word(msgBN, msg);
@@ -38,7 +41,6 @@ void Algorithm2_ECC(int msg)
 
     EC_POINT* ranPub = EC_POINT_new(group);
     EC_POINT_mul(group, ranPub, NULL, Pub, ran, ctx);
-
     EC_POINT* C2 = EC_POINT_new(group);
     EC_POINT_add(group, C2, ranPub, Pmsg, ctx);
 
@@ -49,7 +51,6 @@ void Algorithm2_ECC(int msg)
     EC_POINT* Pmsg_rec = EC_POINT_new(group);
     EC_POINT_invert(group, C, ctx);
     EC_POINT_add(group, Pmsg_rec, C2, C, ctx);
-
     cout << "Method-1 ECC encryption/decryption completed\n";
 
     /* ---------  ENCRYPTION METHOD 2 ------------*/
@@ -60,6 +61,7 @@ void Algorithm2_ECC(int msg)
     BN_mul(C3, msgBN, ran, ctx);
 
     /* --------- DECRYPTION METHOD 2 --------- */
+    
     BIGNUM* C2inv = BN_mod_inverse(NULL, ran,
         EC_GROUP_get0_order(group), ctx);
 
@@ -91,3 +93,4 @@ int main()
     Algorithm2_ECC(msg);
     return 0;
 }
+
