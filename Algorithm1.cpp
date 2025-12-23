@@ -8,6 +8,7 @@
 #include <iostream>
 using namespace std;
 using namespace std::chrono;
+
 EC_KEY* generateECCKey()
 {
     EC_KEY* key = EC_KEY_new_by_curve_name(NID_X9_62_prime256v1);
@@ -20,14 +21,13 @@ bool eccSignVerify(EC_KEY* key)
     unsigned char sig[256];
     unsigned int sigLen;
 
-    // Sign
+    // Signing
     if (!ECDSA_sign(0, msg, sizeof(msg), sig, &sigLen, key))
         return false;
 
-    // Verify
+    // Verifying
     return ECDSA_verify(0, msg, sizeof(msg), sig, sigLen, key) == 1;
 }
-/* ---------------- ALGORITHM-1 CORE ---------------- */
 
 void runAlgorithm1(int keySize, double& encTime, double& decTime)
 {
@@ -62,13 +62,14 @@ void runAlgorithm1(int keySize, double& encTime, double& decTime)
     auto t2 = high_resolution_clock::now();
 
     /* --------- CLOUD COMPUTATION --------- */
-    ctxt += ctxt;   // Eval(pk, F, c)
+    ctxt += ctxt;  
     auto t3 = high_resolution_clock::now();
+    
     /* --------- DECRYPTION --------- */
     helib::Ptxt<helib::BGV> result(context);
     sk.Decrypt(result, ctxt);
     auto t4 = high_resolution_clock::now();
-    encTime =
+    encTime = 
         duration_cast<milliseconds>(t2 - t1).count();
     decTime =
         duration_cast<milliseconds>(t4 - t3).count();
@@ -80,11 +81,13 @@ int main()
     cout << "\nAlgorithm-1: Lightweight ECC + FHE Scheme\n";
     cout << "KeySize\tEnc(ms)\tDec(ms)\n";
 
-    for (int k : keySizes) {
+    for (int k : keySizes) 
+    {
         double enc, dec;
         runAlgorithm1(k, enc, dec);
         cout << k << "\t" << enc << "\t" << dec << endl;
     }
     return 0;
 }
+
 
