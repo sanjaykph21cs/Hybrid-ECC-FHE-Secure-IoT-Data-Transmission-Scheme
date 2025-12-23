@@ -1,4 +1,5 @@
 /* ---------Hybrid ECC-FHE Secure IoT Data Transmission Scheme--------- */
+
 #include <helib/helib.h>
 #include <openssl/ec.h>
 #include <openssl/ecdsa.h>
@@ -32,6 +33,7 @@ bool eccAuth(EC_KEY* key, const string& id)
         (const unsigned char*)id.c_str(), id.size(),
         sig, sigLen, key) == 1;
 }
+
 void runAlgorithm3(int keySize, double& encAvg, double& decAvg)
 {
     vector<double> encTimes, decTimes;
@@ -158,3 +160,4 @@ int main()
     }
     return 0;
 }
+
